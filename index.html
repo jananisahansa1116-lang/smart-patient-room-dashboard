@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Patient Room Monitoring</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f7fb;
+      color: #1f2937;
+    }
+
+    header {
+      background: #1769aa;
+      color: white;
+      padding: 22px 35px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .live {
+      background: #dcfce7;
+      color: #166534;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      color: #64748b;
+      font-size: 15px;
+    }
+
+    .value {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .status {
+      margin-top: 25px;
+      padding: 22px;
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .normal {
+      color: #15803d;
+    }
+
+    .warning {
+      color: #ca8a04;
+    }
+
+    .critical {
+      color: #dc2626;
+    }
+
+    .alert {
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 10px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-weight: bold;
+      display: none;
+    }
+
+    .updated {
+      margin-top: 20px;
+      color: #64748b;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Smart Patient Room Monitoring System</h1>
+  <p>IoT-Based Environmental Monitoring Dashboard</p>
+</header>
+
+<div class="container">
+
+  <div class="top">
+    <div>
+      <h2>Room 101</h2>
+      <p>Real-time environmental monitoring</p>
+    </div>
+
+    <div class="live">● LIVE</div>
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <h3>🌡 Temperature</h3>
+      <div class="value" id="temperature">-- °C</div>
+    </div>
+
+    <div class="card">
+      <h3>💧 Humidity</h3>
+      <div class="value" id="humidity">-- %</div>
+    </div>
+
+    <div class="card">
+      <h3>🌫 Air Quality</h3>
+      <div class="value" id="airQuality">--</div>
+    </div>
+
+    <div class="card">
+      <h3>💡 Light Level</h3>
+      <div class="value" id="lightLevel">--</div>
+    </div>
+
+  </div>
+
+  <div class="status">
+    <h3>Room Environmental Status</h3>
+    <div class="value" id="status">Waiting for data...</div>
+
+    <div class="alert" id="alert">
+      ⚠️ Environmental condition requires attention.
+    </div>
+
+    <div class="updated">
+      Last updated: <span id="updated">Waiting...</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL = "https://hgitlzreolcqpmxnlihj.supabase.co/rest/v1/";
+const SUPABASE_KEY = "sb_publishable_xSK1eeXpbpNvfZScpiOlCA_709dZW6B";
+
+async function loadData() {
+
+  try {
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/room_environment?room_id=eq.Room%20101&order=created_at.desc&limit=1",
+      {
+        headers: {
+          "apikey": SUPABASE_KEY
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if (!data || data.length === 0) {
+      return;
+    }
+
+    const room = data[0];
+
+    document.getElementById("temperature").textContent =
+      room.temperature + " °C";
+
+    document.getElementById("humidity").textContent =
+      room.humidity + " %";
+
+    document.getElementById("airQuality").textContent =
+      room.air_quality ?? "--";
+
+    document.getElementById("lightLevel").textContent =
+      room.light_level ?? "--";
+
+    const statusElement = document.getElementById("status");
+    const alertElement = document.getElementById("alert");
+
+    statusElement.textContent = room.status || "Unknown";
+
+    statusElement.className = "value";
+
+    if (room.status === "Normal") {
+      statusElement.classList.add("normal");
+      alertElement.style.display = "none";
+    }
+
+    else if (room.status === "Warning") {
+      statusElement.classList.add("warning");
+      alertElement.style.display = "block";
+      alertElement.textContent =
+        "⚠️ Warning: Room temperature is outside the preferred range.";
+    }
+
+    else if (room.status === "Critical") {
+      statusElement.classList.add("critical");
+      alertElement.style.display = "block";
+      alertElement.textContent =
+        "🚨 Critical Alert: Immediate attention is required.";
+    }
+
+    document.getElementById("updated").textContent =
+      new Date(room.created_at).toLocaleString();
+
+  }
+
+  catch (error) {
+    console.log("Connection error:", error);
+  }
+}
+
+loadData();
+
+setInterval(loadData, 2000);
+
+</script>
+
+</body>
+</html>
