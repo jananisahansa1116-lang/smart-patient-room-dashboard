@@ -1,116 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Smart Patient Room Monitoring</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
-
     body {
+      font-family: Arial, sans-serif;
       margin: 0;
       background: #f4f7fb;
-      color: #1f2937;
+      color: #222;
     }
 
     header {
-      background: #1769aa;
+      background: #1f6f8b;
       color: white;
-      padding: 22px 35px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 26px;
-    }
-
-    header p {
-      margin: 6px 0 0;
-      opacity: 0.9;
+      padding: 20px;
+      text-align: center;
     }
 
     .container {
-      max-width: 1200px;
-      margin: 30px auto;
+      max-width: 1100px;
+      margin: 25px auto;
       padding: 0 20px;
     }
 
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-    }
-
-    .live {
-      background: #dcfce7;
-      color: #166534;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-weight: bold;
+    h2 {
+      margin-top: 30px;
     }
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
     }
 
     .card {
       background: white;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
-
-    .card h3 {
-      margin: 0 0 12px;
-      color: #64748b;
-      font-size: 15px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     .value {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: bold;
+      margin-top: 10px;
     }
 
     .status {
-      margin-top: 25px;
-      padding: 22px;
-      border-radius: 14px;
-      background: white;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      font-size: 24px;
+      font-weight: bold;
     }
 
     .normal {
-      color: #15803d;
+      color: green;
     }
 
     .warning {
-      color: #ca8a04;
+      color: orange;
     }
 
     .critical {
-      color: #dc2626;
+      color: red;
     }
 
-    .alert {
-      margin-top: 20px;
-      padding: 18px;
+    .alert-box {
+      background: #fff0f0;
+      border-left: 6px solid red;
+      padding: 20px;
       border-radius: 10px;
-      background: #fee2e2;
-      color: #991b1b;
-      font-weight: bold;
-      display: none;
+      margin-top: 20px;
     }
 
-    .updated {
+    .safe-box {
+      background: #effaf0;
+      border-left: 6px solid green;
+      padding: 20px;
+      border-radius: 10px;
       margin-top: 20px;
-      color: #64748b;
+    }
+
+    button {
+      background: #1f6f8b;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      margin-top: 15px;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background: #e9f1f5;
+    }
+
+    .not-implemented {
+      color: #777;
       font-size: 14px;
     }
   </style>
@@ -119,66 +124,90 @@
 <body>
 
 <header>
-  <h1>Smart Patient Room Monitoring System</h1>
-  <p>IoT-Based Environmental Monitoring Dashboard</p>
+  <h1>IoT-Based Smart Patient Room Monitoring System</h1>
+  <p>Hospital Environmental Monitoring Dashboard</p>
 </header>
 
 <div class="container">
 
-  <div class="top">
-    <div>
-      <h2>Room 101</h2>
-      <p>Real-time environmental monitoring</p>
-    </div>
-
-    <div class="live">● LIVE</div>
-  </div>
+  <h2>Room 101 - Live Monitoring</h2>
 
   <div class="cards">
 
     <div class="card">
-      <h3>🌡 Temperature</h3>
+      <div>🌡️ Temperature</div>
       <div class="value" id="temperature">-- °C</div>
     </div>
 
     <div class="card">
-      <h3>💧 Humidity</h3>
+      <div>💧 Humidity</div>
       <div class="value" id="humidity">-- %</div>
     </div>
 
     <div class="card">
-      <h3>🌫 Air Quality</h3>
-      <div class="value" id="airQuality">--</div>
+      <div>🌫️ Air Quality</div>
+      <div class="value">--</div>
+      <p class="not-implemented">
+        Additional sensor planned for future integration
+      </p>
     </div>
 
     <div class="card">
-      <h3>💡 Light Level</h3>
-      <div class="value" id="lightLevel">--</div>
+      <div>💡 Light Level</div>
+      <div class="value">--</div>
+      <p class="not-implemented">
+        Additional sensor planned for future integration
+      </p>
+    </div>
+
+    <div class="card">
+      <div>Room Status</div>
+      <div class="status" id="status">--</div>
     </div>
 
   </div>
 
-  <div class="status">
-    <h3>Room Environmental Status</h3>
-    <div class="value" id="status">Waiting for data...</div>
 
-    <div class="alert" id="alert">
-      ⚠️ Environmental condition requires attention.
-    </div>
+  <h2>🚨 Active Alert</h2>
 
-    <div class="updated">
-      Last updated: <span id="updated">Waiting...</span>
-    </div>
+  <div id="activeAlert" class="safe-box">
+    No active critical alert.
   </div>
+
+
+  <h2>📋 Alert History</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Room</th>
+        <th>Temperature</th>
+        <th>Humidity</th>
+        <th>Alert</th>
+        <th>Date & Time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody id="alertHistory">
+      <tr>
+        <td colspan="6">Loading...</td>
+      </tr>
+    </tbody>
+  </table>
 
 </div>
+
 
 <script>
 
 const SUPABASE_URL = "https://hgitlzreolcqpmxnlihj.supabase.co";
+
+// KEEP YOUR EXISTING SUPABASE KEY HERE
 const SUPABASE_KEY = "sb_publishable_xSK1eeXpbpNvfZScpiOlCA_709dZW6B";
 
-async function loadData() {
+
+async function loadRoomData() {
 
   try {
 
@@ -187,7 +216,8 @@ async function loadData() {
       "/rest/v1/room_environment?room_id=eq.Room%20101&order=created_at.desc&limit=1",
       {
         headers: {
-          "apikey": SUPABASE_KEY
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
         }
       }
     );
@@ -206,51 +236,217 @@ async function loadData() {
     document.getElementById("humidity").textContent =
       room.humidity + " %";
 
-    document.getElementById("airQuality").textContent =
-      room.air_quality ?? "--";
-
-    document.getElementById("lightLevel").textContent =
-      room.light_level ?? "--";
-
     const statusElement = document.getElementById("status");
-    const alertElement = document.getElementById("alert");
 
-    statusElement.textContent = room.status || "Unknown";
+    statusElement.textContent = room.status;
 
-    statusElement.className = "value";
+    statusElement.className = "status";
 
     if (room.status === "Normal") {
       statusElement.classList.add("normal");
-      alertElement.style.display = "none";
     }
-
     else if (room.status === "Warning") {
       statusElement.classList.add("warning");
-      alertElement.style.display = "block";
-      alertElement.textContent =
-        "⚠️ Warning: Room temperature is outside the preferred range.";
     }
-
     else if (room.status === "Critical") {
       statusElement.classList.add("critical");
-      alertElement.style.display = "block";
-      alertElement.textContent =
-        "🚨 Critical Alert: Immediate attention is required.";
     }
 
-    document.getElementById("updated").textContent =
-      new Date(room.created_at).toLocaleString();
-
   }
-
   catch (error) {
-    console.log("Connection error:", error);
+    console.log("Room data error:", error);
   }
 }
 
-loadData();
 
-setInterval(loadData, 2000);
+
+async function loadAlertHistory() {
+
+  try {
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/alert_history?order=created_at.desc&limit=10",
+      {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
+
+    const alerts = await response.json();
+
+    const table = document.getElementById("alertHistory");
+
+    table.innerHTML = "";
+
+    if (!alerts || alerts.length === 0) {
+
+      table.innerHTML =
+        "<tr><td colspan='6'>No alerts recorded.</td></tr>";
+
+      return;
+    }
+
+
+    alerts.forEach(alert => {
+
+      const row = document.createElement("tr");
+
+      const date = new Date(alert.created_at);
+
+      row.innerHTML = `
+        <td>${alert.room_id}</td>
+        <td>${alert.temperature} °C</td>
+        <td>${alert.humidity} %</td>
+        <td>${alert.alert_type}</td>
+        <td>${date.toLocaleString()}</td>
+        <td>
+          ${
+            alert.acknowledged
+            ? "✅ Acknowledged"
+            : `<button onclick="acknowledgeAlert(${alert.id})">
+                 Acknowledge
+               </button>`
+          }
+        </td>
+      `;
+
+      table.appendChild(row);
+
+    });
+
+    showActiveAlert(alerts);
+
+  }
+  catch (error) {
+
+    console.log("Alert history error:", error);
+
+  }
+
+}
+
+
+
+function showActiveAlert(alerts) {
+
+  const activeAlert =
+    document.getElementById("activeAlert");
+
+  const unacknowledged =
+    alerts.find(alert =>
+      alert.alert_type === "Critical" &&
+      alert.acknowledged === false
+    );
+
+
+  if (unacknowledged) {
+
+    const date =
+      new Date(unacknowledged.created_at);
+
+    activeAlert.className = "alert-box";
+
+    activeAlert.innerHTML = `
+      <h3>🔴 CRITICAL ALERT</h3>
+
+      <p><strong>Room:</strong>
+      ${unacknowledged.room_id}</p>
+
+      <p><strong>Temperature:</strong>
+      ${unacknowledged.temperature} °C</p>
+
+      <p><strong>Humidity:</strong>
+      ${unacknowledged.humidity} %</p>
+
+      <p><strong>Time:</strong>
+      ${date.toLocaleString()}</p>
+
+      <button onclick="acknowledgeAlert(${unacknowledged.id})">
+        Acknowledge Alert
+      </button>
+    `;
+
+  }
+  else {
+
+    activeAlert.className = "safe-box";
+
+    activeAlert.innerHTML =
+      "✅ No active critical alert.";
+
+  }
+
+}
+
+
+
+async function acknowledgeAlert(id) {
+
+  try {
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/alert_history?id=eq." + id,
+      {
+        method: "PATCH",
+
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+
+        body: JSON.stringify({
+          acknowledged: true
+        })
+      }
+    );
+
+
+    if (response.ok) {
+
+      loadAlertHistory();
+
+    }
+    else {
+
+      console.log(
+        "Acknowledgement failed:",
+        response.status
+      );
+
+    }
+
+  }
+  catch (error) {
+
+    console.log(
+      "Acknowledgement error:",
+      error
+    );
+
+  }
+
+}
+
+
+
+function refreshDashboard() {
+
+  loadRoomData();
+
+  loadAlertHistory();
+
+}
+
+
+refreshDashboard();
+
+setInterval(refreshDashboard, 3000);
 
 </script>
 
